@@ -9,7 +9,7 @@ void front_to_back();
 
 process_t *head = NULL;
 process_t *tail = NULL;
-
+process_t *current_process = NULL;
 
 struct process_state {
 	unsigned int* osp;
@@ -76,7 +76,7 @@ void remove_first() {
 		//if there is only the head node
 		if(tail == NULL) {
 			//free the head's stack
-			process_stack_free(head->sp, head->n);
+			process_stack_free(head->osp, head->n);
 			//free the head node
 			free(head);
 			//set head to null
@@ -88,7 +88,7 @@ void remove_first() {
 			struct process_state *tmp;
 			tmp = head->next;
 			//free the head's stack
-			process_stack_free(head->sp, head->n);
+			process_stack_free(head->osp, head->n);
 			//free the head node
 			free(head);
 			//set the head to the next process in the LL
@@ -131,6 +131,15 @@ void front_to_back() {
 	}
 }
 
+unsigned int * process_select(unsigned int * cursp) {
+
+}
+
+void process_start() {
+	NVIC_EnableIRQ(PIT_IRQn);
+	//work on this
+	process_begin();
+}
 
 
 
