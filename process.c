@@ -3,6 +3,10 @@
 #include <MKL46Z4.h>
 
 
+void add_process_state(void (*f)(void), int);
+void remove_first();
+void front_to_back();
+
 process_t *head = NULL;
 process_t *tail = NULL;
 
@@ -25,14 +29,14 @@ void add_process_state(void (*f)(void), int n) {
 	struct process_state *elem;
 
 	//allocating memory for the element, assigning its values
-	elem = (process_state *) malloc(20);
+	elem = (process_t *) malloc(20);
 	elem->n = n;
 	elem->sp = process_stack_init(f, n);
 	elem->osp = elem->sp;
 	elem->next = NULL;
 
 	//if this is the first element to be created
-	if (*head == NULL) {
+	if (head == NULL) {
 		head = elem;
 		tail = elem->next;
 	}
@@ -106,26 +110,27 @@ void front_to_back() {
 	if(head != NULL && tail != NULL) {
 		//if the head and tail are the only existing nodes
 		if(tail == head->next && tail->next == NULL) {
-			process_state *tmp = head;
+			process_t *tmp = head;
 			tail->next = head;
 			//put the current tail node into head
 			head = tail;
 			//store the old head into the tail
 			tail = tmp;
-			tail->next = NULL
-		}
-		//3 or more nodes
-		else {
-			//set the next node of the tail to the current head node
-			tail->next = head;
-			//make the old head node the new tail node, and make the next null
-			tail = head;
 			tail->next = NULL;
-			//make the new head node the next element of the old head node
-			head = head->next;
 		}
 	}
+	//3 or more nodes
+	else {
+		//set the next node of the tail to the current head node
+		tail->next = head;
+		//make the old head node the new tail node, and make the next null
+		tail = head;
+		tail->next = NULL;
+		//make the new head node the next element of the old head node
+		head = head->next;
+	}
 }
+
 
 
 
